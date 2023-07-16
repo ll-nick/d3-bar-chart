@@ -11,3 +11,15 @@ body {
     text-align: center;
     /* color: white; */
 }
+
+.bar:hover {
+    fill: white;
+}
+
+#tooltip-bg {
+    fill: blue;
+}
+
+#tooltip {
+    color: red;
+}
