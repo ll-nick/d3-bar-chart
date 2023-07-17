@@ -1,25 +1,63 @@
+:root {
+    --bg-color: #2D3A3A;
+    --container-color: #424874;
+    --font-color: #EEF0F2;
+    --tooltip-color: #A2999E;
+    --chart-color: #63768D;
+}
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    /* background-color: navy; */
+    background-color: var(--bg-color);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    position: relative;
+    fill: var(--font-color);
+    height: 100vh;
 }
 
 #chart-container {
     text-align: center;
-    /* color: white; */
+    height: 80%;
+    width: 100%;
+    max-width: 1500px;
+    background-color: var(--container-color);
+    margin: 2rem;
+    padding-top: 1rem;
+    border-radius: 2rem;
+}
+
+svg {
+    height: 100%;
+    width: 100%;
+}
+
+#title {
+    font-size: 2rem;
+}
+
+#x-axis,
+#y-axis {
+    color: var(--font-color);
+    font-size: 0.7rem;
+}
+
+.bar {
+    fill: var(--chart-color);
 }
 
 .bar:hover {
-    fill: white;
-}
-
-#tooltip-bg {
-    fill: blue;
+    fill: var(--bg-color);
 }
 
 #tooltip {
-    color: red;
+    background-color: var(--tooltip-color);
+    position: absolute;
+    top: 70%;
+    font-size: 1rem;
+    padding: 0.7rem;
+    border-radius: 1rem;
+    color: var(--font-color);
+    transition: opacity 200ms;
 }

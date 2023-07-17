@@ -22,15 +22,14 @@ dataset.then(dataset => {
         .range([height - padding, padding])
 
     // HTML Elements
-    const svg = d3.select('#chart-container')
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height);
-
     const tooltip = d3.select('#chart-container')
         .append('div')
         .attr('id', 'tooltip')
-        .style('position', 'absolute')
+
+    const svg = d3.select('#chart-container')
+        .append('svg')
+        .attr('viewBox', '0 0 ' + width + ' ' + height)
+    const svgWidth = svg.node().clientWidth;
 
     // Title
     svg.append('text')
@@ -38,23 +37,28 @@ dataset.then(dataset => {
         .attr('y', padding / 2)
         .attr('text-anchor', 'middle')
         .attr('id', 'title')
-        .style('font-size', '30px')
         .text('United States GDP');
 
     // Axes
     let xAxis = d3.axisBottom(xScale)
         .tickFormat(d3.timeFormat('%Y'))
         .ticks(d3.timeYear.every(5))
+        .tickSizeOuter(0)
     svg.append('g')
         .attr('transform', 'translate(0, ' + (height - padding) + ')')
         .attr('id', 'x-axis')
         .call(xAxis)
 
     let yAxis = d3.axisLeft(yScale)
+        .tickSizeOuter(0)
     svg.append('g')
         .attr('transform', 'translate(' + padding + ', 0)')
         .attr('id', 'y-axis')
         .call(yAxis)
+    svg.append('text')
+        .attr('id', 'y-axis-label')
+        .attr('transform', 'translate(' + (padding + 20) + ',' + height / 2 + ') rotate(-90)')
+        .text('Gross Domestic Product')
 
     // Plot data
     const barWidth = (width - padding * 2) / dataPoints.length + 1;
@@ -62,7 +66,7 @@ dataset.then(dataset => {
         .data(dataPoints)
         .enter()
         .append('rect')
-        .attr('x', d => xScale(timeParser(d[0])) - barWidth / 2)
+        .attr('x', d => xScale(timeParser(d[0])))
         .attr('y', d => yScale(d[1]))
         .attr('data-date', d => d[0])
         .attr('data-gdp', d => d[1])
@@ -75,11 +79,14 @@ dataset.then(dataset => {
                 .html(toolTipDateFormat(timeParser(d[0])) + '<br>$' + d[1] + ' Billion')
                 .attr('data-date', d[0])
                 .style('opacity', 0.9)
-                .style('left', event.x + "px")
-                .style('top', "60%")
+                .style('left', (event.x < svgWidth / 2 ? event.x + 20 : event.x - 180) + 'px')
         })
         .on('mouseout', function (e) {
             tooltip.style('opacity', 0);
         })
+
+    // Move axes to foreground
+    d3.select('#x-axis').raise()
+    d3.select('#y-axis').raise()
 
 })
